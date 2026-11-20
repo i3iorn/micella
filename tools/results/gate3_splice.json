@@ -1,0 +1,7 @@
+{
+  "ppl_bf16": 20.2833,
+  "ppl_layer0mlp_1bpw_naive": 142892512.0,
+  "delta_pct_naive": 704483502.868,
+  "ppl_layer0mlp_1bpw_actfit": 34.9832,
+  "delta_pct_actfit": 72.473
+}

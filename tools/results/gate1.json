@@ -1,0 +1,22 @@
+{
+  "int4_cos": {
+    "gate_proj": {
+      "mean": 0.97373,
+      "min": 0.81333
+    },
+    "up_proj": {
+      "mean": 0.97918,
+      "min": 0.89457
+    },
+    "down_proj": {
+      "mean": 0.98356,
+      "min": 0.91278
+    }
+  },
+  "ppl_int4_run1": 20.2472,
+  "ppl_int4_run2": 20.2472,
+  "ppl_bf16": 20.2833,
+  "ppl_delta_pct": -0.178,
+  "repeatable": true,
+  "GATE1_PASS": true
+}

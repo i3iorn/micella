@@ -51,6 +51,36 @@ scalars to compensate the binary loss. Teacher-free weight-space objectives
 4. Accept 0.1-0.3 bpw may simply need distillation (KD from the fp model on
    CPU is possible for small models - the KDTrainer loss exists in the repo).
 
-## Verdict so far
-Naive post-training FAILS (negative result, now documented). The pipeline is
-in place; experiment 1 is the immediate next step before declaring M3 dead.
+## UPDATE (same day): activation-space scale fitting WORKS - M3 revived
+
+Following the WSP literature (validation-gated, localized edits; weightBench's
+data-free-compression failure track), gate 2/3 were rebuilt around the
+activation metric. Results on Qwen3-0.6B layer-0 MLP @ 1 bpw:
+
+| method | activation cos | spliced ppl delta |
+|---|---|---|
+| naive SVD init (M3 original) | 0.56-0.59 | +7e7% (ppl 1.4e8) |
+| + ITQ (LittleBit-2 rotation) | 0.70-0.76 | - |
+| + activation-space u1/c fit | 0.71-0.79 | **+72% (ppl 35.0)** |
+| official QAT 8B @0.55 (control) | 0.62-0.76 | works (ppl 22.9) |
+
+Three decisive facts:
+1. **Activation-space scale fitting is the missing science ingredient.** Same
+   signs, same structure - refitting ONLY the scales on real activations
+   turns a destroyed model (ppl 1.4e8) into a functioning one (ppl 35).
+2. The 0.95 activation-cos gate was miscalibrated: the OFFICIAL working QAT
+   model measures 0.62-0.76 per-linear (row minima 0.07-0.27). cos is a
+   diagnostic; ppl is the gate. (Second gate recalibrated by a control -
+   same lesson as gate 1.)
+3. A single layer at 1 bpw costs +72% ppl - still ~35x too much for 28-layer
+   compaction (need ~+2%/layer). Remaining gap is the sign geometry (cos
+   0.71-0.79 vs what QAT achieves end-to-end) and possibly calibration
+   breadth (2048 tokens for ~3800 fit params).
+
+## Next (revised gate 2/3 continuation)
+- More calibration tokens + more alternation sweeps (cheap).
+- ASVD-style whitening: scale columns by activation RMS before SVD so
+  binarization destroys activation-unimportant directions.
+- Damped sign refinement under the ACTIVATION objective (the earlier ICM was
+  in weight space - wrong objective).
+- Then: full 0.6B @ 1 bpw checkpoint (all layers, gated) -> real ppl table.
