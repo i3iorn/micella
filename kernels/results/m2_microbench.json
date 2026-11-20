@@ -1,0 +1,64 @@
+[
+  {
+    "shape": "kv_proj",
+    "in": 4096,
+    "out": 1024,
+    "r": 208,
+    "triton_us": 121.4,
+    "torch_bf16_us": 233.0,
+    "speedup": 1.92,
+    "factor_GB_per_token_per_pair": 0.001,
+    "effective_GB_s": 8.8
+  },
+  {
+    "shape": "qo_proj",
+    "in": 4096,
+    "out": 4096,
+    "r": 544,
+    "triton_us": 111.6,
+    "torch_bf16_us": 228.4,
+    "speedup": 2.05,
+    "factor_GB_per_token_per_pair": 0.004,
+    "effective_GB_s": 39.9
+  },
+  {
+    "shape": "gate_up",
+    "in": 4096,
+    "out": 12288,
+    "r": 824,
+    "triton_us": 126.6,
+    "torch_bf16_us": 380.4,
+    "speedup": 3.0,
+    "factor_GB_per_token_per_pair": 0.014,
+    "effective_GB_s": 106.7
+  },
+  {
+    "shape": "down",
+    "in": 12288,
+    "out": 4096,
+    "r": 824,
+    "triton_us": 117.7,
+    "torch_bf16_us": 360.4,
+    "speedup": 3.06,
+    "factor_GB_per_token_per_pair": 0.014,
+    "effective_GB_s": 114.7
+  },
+  {
+    "summary": "cuda_graph",
+    "per_token_us": 281.4,
+    "implied_tok_s": 3553.9,
+    "replay_rel_err": 0.0037682070396840572
+  },
+  {
+    "summary": "triton",
+    "per_layer_us": 1670.3,
+    "per_token_us": 30066.1,
+    "implied_tok_s": 33.3
+  },
+  {
+    "summary": "torch_bf16",
+    "per_layer_us": 4207.8,
+    "per_token_us": 75740.1,
+    "implied_tok_s": 13.2
+  }
+]

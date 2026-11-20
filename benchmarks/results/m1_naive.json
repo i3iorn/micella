@@ -1,0 +1,24 @@
+{
+  "variant": "naive",
+  "model": "models/littlebit-qwen3-8b-0.55bpw",
+  "load_seconds": 71.9,
+  "vram_after_load": {
+    "allocated_gb": 9.458,
+    "reserved_gb": 9.539
+  },
+  "gpu_process_mib": null,
+  "prefill": {
+    "prompt_tokens": 7,
+    "prefill_tok_s": 2.99
+  },
+  "decode": {
+    "decode_tok_s": 1.7,
+    "gen_seconds": 18.78,
+    "sample_text": " \"The sea is a place of great beauty, and it is the place of the sea.\" The sea is a place of great beauty, and it is the"
+  },
+  "vram_after_decode": {
+    "allocated_gb": 9.466,
+    "reserved_gb": 9.566
+  },
+  "status": "ok"
+}

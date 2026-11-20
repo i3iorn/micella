@@ -1,0 +1,7 @@
+{
+  "eager_tok_s": 4.68,
+  "compiled_tok_s": 0.2,
+  "speedup": 0.04,
+  "tokens_match": true,
+  "compile_seconds": 246.0
+}

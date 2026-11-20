@@ -1,0 +1,9 @@
+{
+  "graph_decode_tok_s": 14.1,
+  "graph_per_token_ms": 70.91,
+  "matches_eager": true,
+  "n_compared": 13,
+  "n_mismatch": 0,
+  "eager_first16": " \"The sea is a place of great beauty, and it is the place of",
+  "graph_text": " is a place of great beauty, and it is the place of the sea.\" The sea is a place of great beauty, and it is the place of the sea. The sea is a place o"
+}

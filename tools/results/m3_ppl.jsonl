@@ -1,0 +1,5 @@
+{"model": "models\\qwen3-0.6b", "fp": true, "chunks": 40, "wikitext2_ppl": 19.559, "tag": "qwen3-0.6b-bf16"}
+{"model": "models\\posttrain-0.6b-055", "fp": false, "chunks": 40, "wikitext2_ppl": 56925072.0, "tag": "qwen3-0.6b-post-0.55"}
+{"model": "models\\posttrain-0.6b-055", "fp": false, "chunks": 40, "wikitext2_ppl": 63065380.0, "tag": "qwen3-0.6b-post-0.55"}
+{"model": "models\\posttrain-0.6b-055-itq", "fp": false, "chunks": 40, "wikitext2_ppl": 49989976.0, "tag": "qwen3-0.6b-post-0.55-itq"}
+{"model": "models\\littlebit-qwen3-8b-0.55bpw", "fp": false, "chunks": 20, "wikitext2_ppl": 22.8639, "tag": "official-8b-0.55"}
