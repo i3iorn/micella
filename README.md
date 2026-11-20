@@ -52,14 +52,26 @@ Question: can anyone compress a model sub-1-bit without Samsung's QAT
 training (which needs the uncompressed teacher and multi-GPU resources)?
 If yes, anyone could compress any model on one machine.
 
-Answer: **no, not with SVD-based init.** Measured on Qwen3-0.6B/8B
-(wikitext2, identical 2048-token chunk protocol):
+Answer: **no, not with SVD-based init** - with an important nuance discovered
+along the way. Measured on Qwen3-0.6B/8B (wikitext2, identical 2048-token
+chunk protocol):
 
 | config | ppl |
 |---|---|
-| bf16 baseline (0.6B) | 19.6 |
+| bf16 baseline (0.6B) | 19.6 (20.28 on 20-chunk protocol) |
 | official QAT 8B @ 0.55 bpw | 22.9 |
 | our SVD post-training @ 0.55 bpw (± ITQ) | ~5e7 |
+| **+ activation-space scale fit, 1 bpw, one layer** | **35.0 (functioning!)** |
+
+The revival: refitting ONLY the scale scalars on real captured activations
+(minimizing ||Wx - Rx||, the activation metric, instead of ||W - R||) takes
+a 1 bpw factorization from destroyed to functioning. The signs were never
+the sole problem - the scales were. Best teacher-free single-layer damage at
+1 bpw: +59% ppl (ridge-regularized alternating fit of per-row and per-latent
+scales); 28-layer compaction needs ~+2%/layer, so the gap is ~30x and is
+dominated by sign geometry that only end-to-end training fixes. Full
+ablation and the pre-written kill criteria in `notes/M3_findings.md` and
+`PLAN-M4.md`.
 
 Diagnostics that matter (full detail in `notes/M3_findings.md`):
 - Per-layer weight reconstruction error is a **bad proxy**: official QAT

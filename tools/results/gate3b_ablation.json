@@ -1,0 +1,15 @@
+{
+  "ppl_bf16": 20.2833,
+  "base_2k_ridge": {
+    "ppl": 32.2118,
+    "delta_pct": 58.81
+  },
+  "ridge_v2fit_2k": {
+    "ppl": 56.1801,
+    "delta_pct": 176.98
+  },
+  "ridge_v2fit_8k": {
+    "ppl": 35.88,
+    "delta_pct": 76.89
+  }
+}

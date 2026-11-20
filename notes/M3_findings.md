@@ -77,10 +77,38 @@ Three decisive facts:
    0.71-0.79 vs what QAT achieves end-to-end) and possibly calibration
    breadth (2048 tokens for ~3800 fit params).
 
-## Next (revised gate 2/3 continuation)
-- More calibration tokens + more alternation sweeps (cheap).
-- ASVD-style whitening: scale columns by activation RMS before SVD so
-  binarization destroys activation-unimportant directions.
-- Damped sign refinement under the ACTIVATION objective (the earlier ICM was
-  in weight space - wrong objective).
-- Then: full 0.6B @ 1 bpw checkpoint (all layers, gated) -> real ppl table.
+## FINAL (same day): ablation results and the verdict
+
+Ridge-stabilized ablation (single-layer ppl delta @ 1 bpw, 0.6B layer-0 MLP):
+| config | ppl delta |
+|---|---|
+| u1/c fit + ridge, 2k calib | **+58.8%** (best) |
+| + v2 input-side LSQ fit, 2k | +177% (overfits) |
+| + v2 fit, 8k calib | +76.9% |
+| whitening | diverges (ill-conditioned) |
+| (no ridge, 2k, earlier) | +85.4% |
+
+Findings:
+- Ridge is essential (85 -> 59); the v2 fit consistently overfits (drop it);
+  whitening needs conditioning work or is a dead end here.
+- Best teacher-free single-layer damage at 1 bpw: +59% ppl. 28-layer
+  compaction needs ~+2%/layer. Gap ~30x, dominated by sign geometry which
+  only end-to-end training (QAT) fixes.
+
+## VERDICT (per PLAN-M4.md gate 8, written before starting)
+KILL CRITERION FIRES: 1 bpw factorization fails the quality bar with all
+method combinations (SVD/ITQ init, activation-space u1/c/v2 fits, ridge,
+whitening) - and the runtime constraint compounds it: 30B params at 1 bpw
+needs PACKED storage (3.75 GB) since int8 factors are 30 GB; the packed
+kernel only made sense if quality held. 2 bpw would need 7.5 GB packed >
+6 GB VRAM. => a 30B MoE factorized on 6 GB VRAM at working quality is out
+of reach without QAT/distillation training. Recorded honestly; the
+activation-space fitting discovery (catastrophic -> functional) and the
+calibration-gate discipline are the reusable positives.
+
+Honest alternatives within the original goal ("big model, fast, 6 GB"):
+- smaller MoE (OLMoE-1B-7B: 7B params -> 1 bpw packed = 0.9 GB, trivially
+  fits; 50 tok/s likely reachable with the M2 runtime),
+- higher-bpw dense LittleBit checkpoints already published (27B @ 1bit
+  Haverbex - needs transformers 5.x + packed kernels),
+- colibri-style hybrid serving (int4 experts, GPU dense trunk).
