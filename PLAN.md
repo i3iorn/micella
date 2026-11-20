@@ -116,3 +116,12 @@ KV cache budgeted. Measure. Iterate on bpw vs quality vs tok/s until either
   install commands and pitfalls)
 - checkpoints: `models/`
 - results: `benchmarks/results/`
+
+## STATUS: CONCLUDED (2026-11-20)
+
+M1/M2 delivered (8.3x runtime, 14.1 tok/s on 8B@0.55bpw, 5.9GB VRAM).
+M3 closed with a documented negative result + partial revival (activation-space
+scale fitting); M4 kill criteria fired per PLAN-M4.md gate 8. Final tag: v1.0.
+Successor project: Wren (Code/Projects/wren) - the opposite direction: take a
+modern 3-5B model and make it as capable as possible (QLoRA + distillation +
+eval-gated iteration on the same 6GB GPU).
